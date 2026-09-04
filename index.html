@@ -312,6 +312,202 @@
     transition: all 0.3s;
   }
   .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ===== TV / IPTV WATCH LAYOUT ===== */
+  .watch-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .watch-layout .player-section {
+    min-width: 0;
+    margin-bottom: 0;
+  }
+
+  .playlist-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    position: sticky;
+    top: 90px;
+    height: calc(100vh - 114px);
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .playlist-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    flex-shrink: 0;
+  }
+
+  .playlist-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .playlist-title h2 {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .playlist-title span {
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .playlist-search {
+    width: 100%;
+    padding: 10px 12px;
+    background: #10101b;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+  }
+
+  .playlist-search:focus {
+    border-color: var(--accent);
+  }
+
+  .playlist-scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    min-height: 0;
+    scrollbar-width: thin;
+  }
+
+  .playlist-scroll .filters {
+    padding: 10px 12px 6px;
+    margin: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .playlist-scroll .filter-btn {
+    padding: 7px 11px;
+    font-size: 11px;
+  }
+
+  .playlist-scroll .stats {
+    padding: 0 14px 8px;
+    margin: 0;
+    font-size: 11px;
+  }
+
+  .playlist-scroll .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 8px 12px;
+  }
+
+  .playlist-scroll .channel-card {
+    display: flex;
+    align-items: center;
+    min-height: 62px;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    background: transparent;
+    transform: none !important;
+    box-shadow: none;
+  }
+
+  .playlist-scroll .channel-card:hover,
+  .playlist-scroll .channel-card:focus {
+    background: var(--bg-card-hover);
+    border-color: var(--border);
+    outline: none;
+  }
+
+  .playlist-scroll .channel-card.active {
+    background: rgba(255,107,53,0.12);
+    border-color: var(--accent);
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+
+  .playlist-scroll .channel-logo,
+  .playlist-scroll .channel-logo-fallback {
+    width: 76px;
+    height: 48px;
+    aspect-ratio: auto;
+    flex: 0 0 76px;
+    padding: 6px;
+    border-radius: 7px;
+    object-fit: contain;
+  }
+
+  .playlist-scroll .channel-logo-fallback {
+    font-size: 20px;
+  }
+
+  .playlist-scroll .channel-info {
+    padding: 6px 9px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .playlist-scroll .channel-name {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .playlist-scroll .channel-group {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+
+  .playlist-scroll .play-overlay {
+    display: none;
+  }
+
+  .playlist-scroll .no-results {
+    padding: 40px 10px;
+  }
+
+  /* Keep the main player large on TV screens. */
+  @media (min-width: 1200px) {
+    .main {
+      max-width: 1800px;
+      padding: 16px;
+    }
+
+    .player-container {
+      max-height: calc(100vh - 205px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .watch-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .playlist-panel {
+      position: static;
+      height: auto;
+      min-height: 420px;
+    }
+
+    .playlist-scroll {
+      max-height: 520px;
+    }
+  }
+
+  /* Android TV / keyboard remote focus */
+  .playlist-scroll .channel-card:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 1px;
+  }
 </style>
 <base target="_blank">
 </head>
@@ -335,34 +531,52 @@
 </div>
 
 <div class="main">
-  <div class="player-section">
-    <div class="player-container" id="playerContainer">
-      <div class="player-placeholder" id="playerPlaceholder">
-        <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <rect x="2" y="7" width="20" height="15" rx="2"/><path d="m17 2-5 5-5-5"/>
-        </svg>
-        <p>Select a channel to start watching</p>
+  <div class="watch-layout">
+
+    <!-- LEFT: large TV player -->
+    <div class="player-section">
+      <div class="player-container" id="playerContainer">
+        <div class="player-placeholder" id="playerPlaceholder">
+          <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <rect x="2" y="7" width="20" height="15" rx="2"/><path d="m17 2-5 5-5-5"/>
+          </svg>
+          <p>Select a channel from the playlist</p>
+        </div>
+        <video id="videoPlayer" controls style="display:none;"></video>
       </div>
-      <video id="videoPlayer" controls style="display:none;"></video>
-    </div>
-    <div class="player-info">
-      <div class="now-playing">
-        <img id="nowPlayingImg" src="" alt="" style="display:none;">
-        <div>
-          <h3 id="nowPlayingName">No channel selected</h3>
-          <p id="nowPlayingGroup">Choose from 741 Indian TV channels below</p>
+      <div class="player-info">
+        <div class="now-playing">
+          <img id="nowPlayingImg" src="" alt="" style="display:none;">
+          <div>
+            <h3 id="nowPlayingName">No channel selected</h3>
+            <p id="nowPlayingGroup">Choose a channel from the playlist</p>
+          </div>
+        </div>
+        <div class="status offline" id="statusBadge">
+          <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="currentColor"/></svg>
+          <span id="statusText">Offline</span>
         </div>
       </div>
-      <div class="status offline" id="statusBadge">
-        <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="currentColor"/></svg>
-        <span id="statusText">Offline</span>
-      </div>
     </div>
-  </div>
 
-  <div class="filters" id="filters"></div>
-  <div class="stats" id="stats"></div>
-  <div class="grid" id="grid"></div>
+    <!-- RIGHT: permanent channel playlist -->
+    <aside class="playlist-panel">
+      <div class="playlist-header">
+        <div class="playlist-title">
+          <h2>📺 Channel List</h2>
+          <span>741 channels</span>
+        </div>
+        <input class="playlist-search" type="text" id="playlistSearchInput"
+               placeholder="Search channels..." autocomplete="off">
+      </div>
+      <div class="playlist-scroll">
+        <div class="filters" id="filters"></div>
+        <div class="stats" id="stats"></div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </aside>
+
+  </div>
 </div>
 
 <div class="footer">
@@ -435,7 +649,10 @@ function renderGrid() {
       : '';
     const fallbackHtml = `<div class="channel-logo-fallback" style="${ch.logo ? 'display:none;' : ''}">📺</div>`;
     return `
-      <div class="channel-card ${isActive ? 'active' : ''}" onclick="playChannel(${channels.indexOf(ch)})">
+      <div class="channel-card ${isActive ? 'active' : ''}" tabindex="0"
+           role="button" aria-label="Play ${ch.name.replace(/"/g, '&quot;')}"
+           onclick="playChannel(${channels.indexOf(ch)})"
+           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playChannel(${channels.indexOf(ch)});}">
         ${logoHtml}${fallbackHtml}
         <div class="play-overlay"><div class="play-btn">▶</div></div>
         <div class="channel-info">
@@ -523,9 +740,19 @@ function playChannel(index) {
   }
 }
 
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  searchQuery = e.target.value;
+function updateSearch(value) {
+  searchQuery = value;
+  document.getElementById('searchInput').value = value;
+  document.getElementById('playlistSearchInput').value = value;
   renderGrid();
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  updateSearch(e.target.value);
+});
+
+document.getElementById('playlistSearchInput').addEventListener('input', (e) => {
+  updateSearch(e.target.value);
 });
 
 renderFilters();
