@@ -183,6 +183,20 @@
     color: #fff;
     border-color: var(--accent);
   }
+  .lang-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.15em;
+    margin-right: 5px;
+    font-size: 12px;
+    line-height: 1;
+    vertical-align: -1px;
+  }
+  .filter-count {
+    opacity: 0.65;
+    margin-left: 4px;
+  }
   .stats {
     font-size: 13px;
     color: var(--text-muted);
@@ -243,6 +257,12 @@
     font-size: 11px;
     color: var(--text-muted);
     margin-top: 2px;
+  }
+  .channel-group .lang-icon {
+    width: auto;
+    margin-right: 3px;
+    font-size: 10px;
+    vertical-align: 0;
   }
   .play-overlay {
     position: absolute;
@@ -405,6 +425,12 @@
 
   .playlist-scroll .filter-btn {
     padding: 7px 11px;
+    font-size: 11px;
+  }
+
+  .playlist-scroll .lang-icon {
+    width: 1em;
+    margin-right: 4px;
     font-size: 11px;
   }
 
@@ -652,6 +678,16 @@ const LANG_ICONS = {
   "Urdu": "🇵🇰"
 };
 
+/* Case/whitespace-tolerant lookup so a language that drifts in the source
+   data ("hindi", "Tamil ") still resolves instead of silently falling back. */
+const LANG_ICON_LOOKUP = Object.fromEntries(
+  Object.entries(LANG_ICONS).map(([lang, icon]) => [lang.trim().toLowerCase(), icon])
+);
+
+function langIcon(name) {
+  return LANG_ICON_LOOKUP[String(name || '').trim().toLowerCase()] || '📺';
+}
+
 function getLanguages() {
   const langs = {};
   channels.forEach(c => {
@@ -663,9 +699,10 @@ function getLanguages() {
 function renderLanguageFilters() {
   const container = document.getElementById('langFilters');
   const langs = getLanguages();
-  let html = `<button class="filter-btn ${activeLanguage === 'All' ? 'active' : ''}" onclick="setLanguage('All')">All (${channels.length})</button>`;
+  const icon = glyph => `<span class="lang-icon" aria-hidden="true">${glyph}</span>`;
+  let html = `<button class="filter-btn ${activeLanguage === 'All' ? 'active' : ''}" title="All languages" onclick="setLanguage('All')">${icon('🌐')}All<span class="filter-count">(${channels.length})</span></button>`;
   langs.forEach(([name, count]) => {
-    html += `<button class="filter-btn ${activeLanguage === name ? 'active' : ''}" onclick="setLanguage('${name.replace(/'/g, "\\'")}')">${LANG_ICONS[name] || '📺'} ${name} (${count})</button>`;
+    html += `<button class="filter-btn ${activeLanguage === name ? 'active' : ''}" title="${name}" onclick="setLanguage('${name.replace(/'/g, "\\'")}')">${icon(langIcon(name))}${name}<span class="filter-count">(${count})</span></button>`;
   });
   container.innerHTML = html;
 }
@@ -711,13 +748,16 @@ function renderGrid() {
       ? `<img class="channel-logo" src="${ch.logo}" alt="${ch.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">`
       : '';
     const fallbackHtml = `<div class="channel-logo-fallback" style="${ch.logo ? 'display:none;' : ''}">📺</div>`;
+    const langHtml = ch.language
+      ? ` · <span class="lang-icon" aria-hidden="true">${langIcon(ch.language)}</span>${ch.language}`
+      : '';
     if (!ch.url) {
       return `
       <div class="channel-card disabled" aria-disabled="true" title="Stream URL unavailable in source data">
         ${logoHtml}${fallbackHtml}
         <div class="channel-info">
           <div class="channel-name" title="${ch.name}">${ch.name}</div>
-          <div class="channel-group"><span class="no-stream-badge">no stream</span>${ch.group}${ch.language ? ' · ' + ch.language : ''}</div>
+          <div class="channel-group"><span class="no-stream-badge">no stream</span>${ch.group}${langHtml}</div>
         </div>
       </div>
     `;
@@ -731,7 +771,7 @@ function renderGrid() {
         <div class="play-overlay"><div class="play-btn">▶</div></div>
         <div class="channel-info">
           <div class="channel-name" title="${ch.name}">${ch.name}</div>
-          <div class="channel-group">${ch.group}${ch.language ? ' · ' + ch.language : ''}</div>
+          <div class="channel-group">${ch.group}${langHtml}</div>
         </div>
       </div>
     `;
