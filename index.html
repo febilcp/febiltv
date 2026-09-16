@@ -600,8 +600,6 @@
                placeholder="Search channels..." autocomplete="off">
       </div>
       <div class="playlist-scroll">
-        <div class="filter-label">Category</div>
-        <div class="filters" id="filters"></div>
         <div class="filter-label">Language</div>
         <div class="filters" id="langFilters"></div>
         <div class="stats" id="stats"></div>
@@ -625,34 +623,34 @@ const channels = [{"name": "4TV News (576p)", "tvg_id": "4TVNews.in@SD", "logo":
 
 let currentHls = null;
 let currentChannel = null;
-let activeFilter = 'All';
 let activeLanguage = 'All';
 let searchQuery = '';
 
-function getGroups() {
-  const groups = {};
-  channels.forEach(c => {
-    const g = c.group || 'Other';
-    groups[g] = (groups[g] || 0) + 1;
-  });
-  return Object.entries(groups).sort((a,b) => b[1] - a[1]);
-}
-
-function renderFilters() {
-  const container = document.getElementById('filters');
-  const groups = getGroups();
-  let html = `<button class="filter-btn ${activeFilter === 'All' ? 'active' : ''}" onclick="setFilter('All')">All (${channels.length})</button>`;
-  groups.forEach(([name, count]) => {
-    html += `<button class="filter-btn ${activeFilter === name ? 'active' : ''}" onclick="setFilter('${name.replace(/'/g,"\'")}')">${name} (${count})</button>`;
-  });
-  container.innerHTML = html;
-}
-
-function setFilter(filter) {
-  activeFilter = filter;
-  renderFilters();
-  renderGrid();
-}
+const LANG_ICONS = {
+  "Assamese": "🇮🇳",
+  "Bengali": "🇮🇳",
+  "Bhojpuri": "🇮🇳",
+  "English": "🇬🇧",
+  "Gujarati": "🇮🇳",
+  "Haryanvi": "🇮🇳",
+  "Hindi": "🇮🇳",
+  "Indian Sign Language": "🤟",
+  "Kannada": "🇮🇳",
+  "Konkani": "🇮🇳",
+  "Maithili": "🇮🇳",
+  "Malayalam": "🇮🇳",
+  "Marathi": "🇮🇳",
+  "Meitei": "🇮🇳",
+  "Mizo": "🇮🇳",
+  "Naga": "🇮🇳",
+  "Nepali": "🇳🇵",
+  "Odia": "🇮🇳",
+  "Punjabi": "🇮🇳",
+  "Tamil": "🇮🇳",
+  "Telugu": "🇮🇳",
+  "Tripuri": "🇮🇳",
+  "Urdu": "🇵🇰"
+};
 
 function getLanguages() {
   const langs = {};
@@ -667,7 +665,7 @@ function renderLanguageFilters() {
   const langs = getLanguages();
   let html = `<button class="filter-btn ${activeLanguage === 'All' ? 'active' : ''}" onclick="setLanguage('All')">All (${channels.length})</button>`;
   langs.forEach(([name, count]) => {
-    html += `<button class="filter-btn ${activeLanguage === name ? 'active' : ''}" onclick="setLanguage('${name.replace(/'/g, "\\'")}')">${name} (${count})</button>`;
+    html += `<button class="filter-btn ${activeLanguage === name ? 'active' : ''}" onclick="setLanguage('${name.replace(/'/g, "\\'")}')">${LANG_ICONS[name] || '📺'} ${name} (${count})</button>`;
   });
   container.innerHTML = html;
 }
@@ -680,9 +678,6 @@ function setLanguage(lang) {
 
 function getFilteredChannels() {
   let result = channels;
-  if (activeFilter !== 'All') {
-    result = result.filter(c => c.group === activeFilter);
-  }
   if (activeLanguage !== 'All') {
     result = result.filter(c => c.language === activeLanguage);
   }
@@ -706,7 +701,7 @@ function renderGrid() {
     : `Showing ${filtered.length} channel${filtered.length !== 1 ? 's' : ''}`;
 
   if (filtered.length === 0) {
-    grid.innerHTML = `<div class="no-results" style="grid-column:1/-1;"><h3>No channels found</h3><p>Try a different search or category</p></div>`;
+    grid.innerHTML = `<div class="no-results" style="grid-column:1/-1;"><h3>No channels found</h3><p>Try a different search or language</p></div>`;
     return;
   }
 
@@ -838,7 +833,6 @@ document.getElementById('playlistSearchInput').addEventListener('input', (e) => 
   updateSearch(e.target.value);
 });
 
-renderFilters();
 renderLanguageFilters();
 renderGrid();
 </script>
