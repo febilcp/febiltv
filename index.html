@@ -360,7 +360,7 @@
   }
 
   .playlist-header {
-    padding: 14px 16px 10px;
+    padding: 14px 16px 12px;
     border-bottom: 1px solid var(--border);
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     flex-shrink: 0;
@@ -375,28 +375,108 @@
   }
 
   .playlist-title h2 {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
   }
 
   .playlist-title span {
     color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .playlist-nav-tabs {
+    display: flex;
+    background: #0f0f1b;
+    border-radius: 10px;
+    padding: 3px;
+    gap: 4px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .playlist-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
     font-size: 12px;
+    font-weight: 600;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .playlist-tab-btn:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .playlist-tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(255, 107, 53, 0.35);
+  }
+
+  .playlist-tab-btn .tab-count {
+    font-size: 11px;
+    opacity: 0.85;
+    font-weight: 500;
+  }
+
+  .playlist-search-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .playlist-search-icon {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
   }
 
   .playlist-search {
     width: 100%;
-    padding: 10px 12px;
-    background: #10101b;
+    padding: 9px 32px 9px 32px;
+    background: #0f0f1b;
     border: 1px solid var(--border);
     border-radius: 9px;
     color: var(--text);
-    font-size: 13px;
+    font-size: 12px;
     outline: none;
+    transition: border-color 0.2s;
   }
 
   .playlist-search:focus {
     border-color: var(--accent);
+  }
+
+  .playlist-search-clear {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    display: none;
+    line-height: 1;
+  }
+
+  .playlist-search-clear:hover {
+    color: var(--text);
   }
 
   .playlist-scroll {
@@ -407,31 +487,207 @@
     scrollbar-width: thin;
   }
 
-  .playlist-scroll .filters {
-    padding: 4px 12px 6px;
-    margin: 0;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+  .playlist-view {
+    display: none;
   }
 
-  .playlist-scroll .filter-label {
-    padding: 10px 14px 0;
-    font-size: 10px;
+  .playlist-view.active {
+    display: block;
+  }
+
+  .menu-view-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px 6px;
+  }
+
+  .menu-view-header .filter-label {
+    padding: 0;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
   }
 
-  .playlist-scroll .filter-btn {
-    padding: 7px 11px;
+  .menu-view-count {
     font-size: 11px;
+    color: var(--text-muted);
   }
 
-  .playlist-scroll .lang-icon {
-    width: 1em;
-    margin-right: 4px;
+  /* Language Grid Menu */
+  .playlist-scroll .filters.language-grid-menu {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 8px 12px 16px;
+    margin: 0;
+    overflow-x: visible;
+    flex-wrap: wrap;
+  }
+
+  .playlist-scroll .filters.language-grid-menu .filter-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 11px;
+    min-height: 46px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .playlist-scroll .filters.language-grid-menu .filter-btn:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(255, 107, 53, 0.16);
+  }
+
+  .playlist-scroll .filters.language-grid-menu .filter-btn.active {
+    background: rgba(255, 107, 53, 0.15);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 0 1px var(--accent), 0 4px 14px rgba(255, 107, 53, 0.2);
+    font-weight: 600;
+  }
+
+  .playlist-scroll .filters.language-grid-menu .lang-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-right: 7px;
+    font-size: 14px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+  }
+
+  .playlist-scroll .filters.language-grid-menu .filter-count {
+    margin-left: auto;
+    padding: 2px 7px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    opacity: 1;
+  }
+
+  .playlist-scroll .filters.language-grid-menu .filter-btn.active .filter-count {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* Channels View Navigation */
+  .channel-view-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px 10px;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+    background: rgba(26, 26, 46, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    backdrop-filter: blur(8px);
+  }
+
+  .back-to-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text);
     font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .back-to-menu-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--bg-card-hover);
+  }
+
+  .current-lang-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: rgba(255, 107, 53, 0.12);
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    color: var(--accent-hover);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .current-lang-pill:hover {
+    background: rgba(255, 107, 53, 0.2);
+    border-color: var(--accent);
+  }
+
+  .current-lang-pill .lang-icon {
+    font-size: 12px;
+    margin-right: 0;
+  }
+
+  .view-layout-toggle {
+    display: inline-flex;
+    background: #0f0f1b;
+    border-radius: 6px;
+    padding: 2px;
+    border: 1px solid var(--border);
+  }
+
+  .layout-btn {
+    padding: 4px 7px;
+    font-size: 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    border-radius: 4px;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.15s;
+  }
+
+  .layout-btn:hover {
+    color: var(--text);
+  }
+
+  .layout-btn.active {
+    background: var(--bg-card-hover);
+    color: var(--accent);
+    font-weight: bold;
   }
 
   .playlist-scroll .stats {
@@ -440,54 +696,61 @@
     font-size: 11px;
   }
 
+  /* Channels Grid (Default: 2-column grid menu) */
   .playlist-scroll .grid {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 0 8px 12px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 10px 14px;
   }
 
   .playlist-scroll .channel-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
     display: flex;
-    align-items: center;
-    min-height: 62px;
-    border-radius: 9px;
-    border: 1px solid transparent;
-    background: transparent;
-    transform: none !important;
-    box-shadow: none;
+    flex-direction: column;
+    min-height: 0;
   }
 
-  .playlist-scroll .channel-card:hover,
-  .playlist-scroll .channel-card:focus {
-    background: var(--bg-card-hover);
-    border-color: var(--border);
-    outline: none;
+  .playlist-scroll .channel-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.18);
   }
 
   .playlist-scroll .channel-card.active {
-    background: rgba(255,107,53,0.12);
     border-color: var(--accent);
-    box-shadow: inset 3px 0 0 var(--accent);
+    box-shadow: 0 0 0 2px var(--accent);
+    background: rgba(255, 107, 53, 0.08);
   }
 
   .playlist-scroll .channel-logo,
   .playlist-scroll .channel-logo-fallback {
-    width: 76px;
-    height: 48px;
-    aspect-ratio: auto;
-    flex: 0 0 76px;
-    padding: 6px;
-    border-radius: 7px;
+    width: 100%;
+    aspect-ratio: 16/9;
+    height: auto;
+    flex: none;
+    padding: 8px;
+    border-radius: 0;
     object-fit: contain;
+    background: linear-gradient(135deg, #151525, #0c0c16);
+    display: block;
   }
 
   .playlist-scroll .channel-logo-fallback {
-    font-size: 20px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .playlist-scroll .channel-info {
-    padding: 6px 9px;
+    padding: 8px 10px;
     min-width: 0;
     flex: 1;
   }
@@ -495,19 +758,103 @@
   .playlist-scroll .channel-name {
     font-size: 12px;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
   }
 
   .playlist-scroll .channel-group {
     font-size: 10px;
+    color: var(--text-muted);
     margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .playlist-scroll .channel-group .lang-icon {
+    width: auto;
+    margin-right: 3px;
+    font-size: 10px;
+    vertical-align: 0;
   }
 
   .playlist-scroll .play-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: calc(100% - 46px);
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .playlist-scroll .channel-card:hover .play-overlay {
+    opacity: 1;
+  }
+
+  .playlist-scroll .play-btn {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #fff;
+  }
+
+  /* List view mode when toggled */
+  .playlist-scroll .grid.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0 8px 12px;
+  }
+
+  .playlist-scroll .grid.list-view .channel-card {
+    flex-direction: row;
+    align-items: center;
+    min-height: 56px;
+    border-radius: 9px;
+    background: transparent;
+    border-color: transparent;
+    transform: none !important;
+    box-shadow: none;
+  }
+
+  .playlist-scroll .grid.list-view .channel-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border);
+  }
+
+  .playlist-scroll .grid.list-view .channel-card.active {
+    background: rgba(255, 107, 53, 0.12);
+    border-color: var(--accent);
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+
+  .playlist-scroll .grid.list-view .channel-logo,
+  .playlist-scroll .grid.list-view .channel-logo-fallback {
+    width: 72px;
+    height: 44px;
+    aspect-ratio: auto;
+    flex: 0 0 72px;
+    padding: 6px;
+    border-radius: 7px;
+  }
+
+  .playlist-scroll .grid.list-view .play-overlay {
     display: none;
   }
 
   .playlist-scroll .no-results {
     padding: 40px 10px;
+    grid-column: 1 / -1;
   }
 
   /* Keep the main player large on TV screens. */
@@ -539,7 +886,11 @@
   }
 
   /* Android TV / keyboard remote focus */
-  .playlist-scroll .channel-card:focus-visible {
+  .playlist-scroll .channel-card:focus-visible,
+  .playlist-scroll .filter-btn:focus-visible,
+  .playlist-tab-btn:focus-visible,
+  .back-to-menu-btn:focus-visible,
+  .current-lang-pill:focus-visible {
     outline: 3px solid var(--accent);
     outline-offset: 1px;
   }
@@ -619,17 +970,55 @@
     <aside class="playlist-panel">
       <div class="playlist-header">
         <div class="playlist-title">
-          <h2>📺 Channel List</h2>
-          <span>741 channels</span>
+          <h2>📺 Channel Playlist</h2>
+          <span id="playlistHeaderSubtitle">23 Languages · 741 Channels</span>
         </div>
-        <input class="playlist-search" type="text" id="playlistSearchInput"
-               placeholder="Search channels..." autocomplete="off">
+        <div class="playlist-nav-tabs" role="tablist" aria-label="Playlist views">
+          <button class="playlist-tab-btn active" id="tabLanguages" role="tab" aria-selected="true" aria-controls="languageMenuView" onclick="switchPlaylistView('languages')">
+            <span class="tab-icon">🗂️</span> Language Menu
+          </button>
+          <button class="playlist-tab-btn" id="tabChannels" role="tab" aria-selected="false" aria-controls="channelListView" onclick="switchPlaylistView('channels')">
+            <span class="tab-icon">📺</span> Channels <span class="tab-count" id="tabChannelsCount">(741)</span>
+          </button>
+        </div>
+        <div class="playlist-search-wrap">
+          <svg class="playlist-search-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input class="playlist-search" type="text" id="playlistSearchInput"
+                 placeholder="Search channels or languages..." autocomplete="off">
+          <button class="playlist-search-clear" id="searchClearBtn" onclick="clearSearch()" title="Clear search" aria-label="Clear search">✕</button>
+        </div>
       </div>
       <div class="playlist-scroll">
-        <div class="filter-label">Language</div>
-        <div class="filters" id="langFilters"></div>
-        <div class="stats" id="stats"></div>
-        <div class="grid" id="grid"></div>
+        <!-- Language Grid Menu View -->
+        <div id="languageMenuView" class="playlist-view active" role="tabpanel" aria-labelledby="tabLanguages">
+          <div class="menu-view-header">
+            <div class="filter-label">Language Grid Menu</div>
+            <span class="menu-view-count">24 Categories</span>
+          </div>
+          <div class="filters language-grid-menu" id="langFilters"></div>
+        </div>
+
+        <!-- Channels View -->
+        <div id="channelListView" class="playlist-view" role="tabpanel" aria-labelledby="tabChannels" style="display:none;">
+          <div class="channel-view-nav">
+            <button class="back-to-menu-btn" onclick="switchPlaylistView('languages')" title="Back to Language Grid Menu">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              <span>Languages</span>
+            </button>
+            <div class="current-lang-pill" id="currentLangPill" onclick="switchPlaylistView('languages')" title="Click to change language">
+              <span class="lang-icon" id="currentLangIcon">🌐</span>
+              <span class="current-lang-name" id="currentLangName">All</span>
+            </div>
+            <div class="view-layout-toggle" role="group" aria-label="Layout toggle">
+              <button class="layout-btn active" id="layoutGridBtn" onclick="setChannelLayout('grid')" title="Grid view">⊞</button>
+              <button class="layout-btn" id="layoutListBtn" onclick="setChannelLayout('list')" title="List view">≡</button>
+            </div>
+          </div>
+          <div class="stats" id="stats"></div>
+          <div class="grid" id="grid"></div>
+        </div>
       </div>
     </aside>
 
@@ -651,6 +1040,8 @@ let currentHls = null;
 let currentChannel = null;
 let activeLanguage = 'All';
 let searchQuery = '';
+let currentPlaylistView = 'languages';
+let channelLayout = 'grid';
 
 const LANG_ICONS = {
   "Assamese": "🇮🇳",
@@ -698,6 +1089,7 @@ function getLanguages() {
 
 function renderLanguageFilters() {
   const container = document.getElementById('langFilters');
+  if (!container) return;
   const langs = getLanguages();
   const icon = glyph => `<span class="lang-icon" aria-hidden="true">${glyph}</span>`;
   let html = `<button class="filter-btn ${activeLanguage === 'All' ? 'active' : ''}" title="All languages" onclick="setLanguage('All')">${icon('🌐')}All<span class="filter-count">(${channels.length})</span></button>`;
@@ -707,10 +1099,71 @@ function renderLanguageFilters() {
   container.innerHTML = html;
 }
 
+function switchPlaylistView(view) {
+  currentPlaylistView = view;
+  const tabLangs = document.getElementById('tabLanguages');
+  const tabChans = document.getElementById('tabChannels');
+  const langView = document.getElementById('languageMenuView');
+  const chanView = document.getElementById('channelListView');
+
+  if (tabLangs) {
+    tabLangs.classList.toggle('active', view === 'languages');
+    tabLangs.setAttribute('aria-selected', view === 'languages' ? 'true' : 'false');
+  }
+  if (tabChans) {
+    tabChans.classList.toggle('active', view === 'channels');
+    tabChans.setAttribute('aria-selected', view === 'channels' ? 'true' : 'false');
+  }
+  if (langView) {
+    langView.style.display = view === 'languages' ? 'block' : 'none';
+    langView.classList.toggle('active', view === 'languages');
+  }
+  if (chanView) {
+    chanView.style.display = view === 'channels' ? 'block' : 'none';
+    chanView.classList.toggle('active', view === 'channels');
+  }
+}
+
+function setChannelLayout(layout) {
+  channelLayout = layout;
+  const gridBtn = document.getElementById('layoutGridBtn');
+  const listBtn = document.getElementById('layoutListBtn');
+  const gridEl = document.getElementById('grid');
+
+  if (gridBtn) gridBtn.classList.toggle('active', layout === 'grid');
+  if (listBtn) listBtn.classList.toggle('active', layout === 'list');
+  if (gridEl) {
+    if (layout === 'list') {
+      gridEl.classList.add('list-view');
+    } else {
+      gridEl.classList.remove('list-view');
+    }
+  }
+}
+
+function updateCurrentLangBadge() {
+  const iconEl = document.getElementById('currentLangIcon');
+  const nameEl = document.getElementById('currentLangName');
+  const tabCountEl = document.getElementById('tabChannelsCount');
+  const filtered = getFilteredChannels();
+
+  if (iconEl) {
+    iconEl.textContent = activeLanguage === 'All' ? '🌐' : langIcon(activeLanguage);
+  }
+  if (nameEl) {
+    nameEl.textContent = activeLanguage;
+  }
+  if (tabCountEl) {
+    tabCountEl.textContent = `(${filtered.length})`;
+  }
+}
+
 function setLanguage(lang) {
   activeLanguage = lang;
   renderLanguageFilters();
   renderGrid();
+  updateCurrentLangBadge();
+  switchPlaylistView('channels');
 }
 
 function getFilteredChannels() {
@@ -731,11 +1184,20 @@ function getFilteredChannels() {
 
 function renderGrid() {
   const grid = document.getElementById('grid');
+  if (!grid) return;
   const filtered = getFilteredChannels();
   const noStream = filtered.filter(c => !c.url).length;
-  document.getElementById('stats').textContent = noStream
-    ? `Showing ${filtered.length} channels · ${noStream} without stream`
-    : `Showing ${filtered.length} channel${filtered.length !== 1 ? 's' : ''}`;
+  const statsEl = document.getElementById('stats');
+  if (statsEl) {
+    if (searchQuery) {
+      statsEl.textContent = `Showing ${filtered.length} channel${filtered.length !== 1 ? 's' : ''} matching "${searchQuery}"`;
+    } else {
+      statsEl.textContent = noStream
+        ? `Showing ${filtered.length} channels · ${noStream} without stream`
+        : `Showing ${filtered.length} channel${filtered.length !== 1 ? 's' : ''}`;
+    }
+  }
+  updateCurrentLangBadge();
 
   if (filtered.length === 0) {
     grid.innerHTML = `<div class="no-results" style="grid-column:1/-1;"><h3>No channels found</h3><p>Try a different search or language</p></div>`;
@@ -780,6 +1242,7 @@ function renderGrid() {
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
+  if (!toast) return;
   toast.textContent = msg;
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 3000);
@@ -801,15 +1264,17 @@ function playChannel(index) {
   const statusBadge = document.getElementById('statusBadge');
   const statusText = document.getElementById('statusText');
 
-  placeholder.style.display = 'none';
-  video.style.display = 'block';
+  if (placeholder) placeholder.style.display = 'none';
+  if (video) video.style.display = 'block';
 
-  nowPlayingImg.src = ch.logo || '';
-  nowPlayingImg.style.display = ch.logo ? 'block' : 'none';
-  nowPlayingName.textContent = ch.name;
-  nowPlayingGroup.textContent = ch.group;
-  statusBadge.className = 'status';
-  statusText.textContent = 'Loading...';
+  if (nowPlayingImg) {
+    nowPlayingImg.src = ch.logo || '';
+    nowPlayingImg.style.display = ch.logo ? 'block' : 'none';
+  }
+  if (nowPlayingName) nowPlayingName.textContent = ch.name;
+  if (nowPlayingGroup) nowPlayingGroup.textContent = ch.group;
+  if (statusBadge) statusBadge.className = 'status';
+  if (statusText) statusText.textContent = 'Loading...';
 
   renderGrid();
 
@@ -818,66 +1283,85 @@ function playChannel(index) {
     currentHls = null;
   }
 
-  video.pause();
-  video.src = '';
+  if (video) {
+    video.pause();
+    video.src = '';
 
-  if (Hls.isSupported()) {
-    currentHls = new Hls({
-      maxBufferLength: 30,
-      maxMaxBufferLength: 60,
-      enableWorker: true,
-    });
-    currentHls.loadSource(ch.url);
-    currentHls.attachMedia(video);
-    currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
-      video.play().catch(() => {});
-      statusBadge.className = 'status';
-      statusText.textContent = 'Live';
-    });
-    currentHls.on(Hls.Events.ERROR, (event, data) => {
-      if (data.fatal) {
-        statusBadge.className = 'status offline';
-        statusText.textContent = 'Error';
+    if (Hls.isSupported()) {
+      currentHls = new Hls({
+        maxBufferLength: 30,
+        maxMaxBufferLength: 60,
+        enableWorker: true,
+      });
+      currentHls.loadSource(ch.url);
+      currentHls.attachMedia(video);
+      currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {});
+        if (statusBadge) statusBadge.className = 'status';
+        if (statusText) statusText.textContent = 'Live';
+      });
+      currentHls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          if (statusBadge) statusBadge.className = 'status offline';
+          if (statusText) statusText.textContent = 'Error';
+          showToast('Failed to load stream. Channel may be offline.');
+        }
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = ch.url;
+      video.addEventListener('loadedmetadata', () => {
+        video.play().catch(() => {});
+        if (statusBadge) statusBadge.className = 'status';
+        if (statusText) statusText.textContent = 'Live';
+      });
+      video.addEventListener('error', () => {
+        if (statusBadge) statusBadge.className = 'status offline';
+        if (statusText) statusText.textContent = 'Error';
         showToast('Failed to load stream. Channel may be offline.');
-      }
-    });
-  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = ch.url;
-    video.addEventListener('loadedmetadata', () => {
-      video.play().catch(() => {});
-      statusBadge.className = 'status';
-      statusText.textContent = 'Live';
-    });
-    video.addEventListener('error', () => {
-      statusBadge.className = 'status offline';
-      statusText.textContent = 'Error';
-      showToast('Failed to load stream. Channel may be offline.');
-    });
-  } else {
-    showToast('Your browser does not support HLS playback.');
+      });
+    } else {
+      showToast('Your browser does not support HLS playback.');
+    }
   }
 }
 
 function updateSearch(value) {
   searchQuery = value;
-  document.getElementById('searchInput').value = value;
-  document.getElementById('playlistSearchInput').value = value;
+  const searchInput = document.getElementById('searchInput');
+  const playlistSearchInput = document.getElementById('playlistSearchInput');
+  const clearBtn = document.getElementById('searchClearBtn');
+
+  if (searchInput && searchInput.value !== value) searchInput.value = value;
+  if (playlistSearchInput && playlistSearchInput.value !== value) playlistSearchInput.value = value;
+  if (clearBtn) clearBtn.style.display = value ? 'block' : 'none';
+
+  if (value && currentPlaylistView !== 'channels') {
+    switchPlaylistView('channels');
+  }
   renderGrid();
 }
 
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  updateSearch(e.target.value);
-});
+function clearSearch() {
+  updateSearch('');
+}
 
-document.getElementById('playlistSearchInput').addEventListener('input', (e) => {
-  updateSearch(e.target.value);
-});
+const searchInputEl = document.getElementById('searchInput');
+if (searchInputEl) {
+  searchInputEl.addEventListener('input', (e) => {
+    updateSearch(e.target.value);
+  });
+}
+
+const playlistSearchInputEl = document.getElementById('playlistSearchInput');
+if (playlistSearchInputEl) {
+  playlistSearchInputEl.addEventListener('input', (e) => {
+    updateSearch(e.target.value);
+  });
+}
 
 renderLanguageFilters();
 renderGrid();
+switchPlaylistView('languages');
 </script>
-</body>
-</html>
-
 </body>
 </html>
